@@ -6,6 +6,8 @@ import com.example.nada.Exceptions.EntitiesNotFoundException;
 import com.example.nada.Mappers.CategoryMappers;
 import com.example.nada.Models.Category;
 import com.example.nada.Repositories.CategoryRepository;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +49,30 @@ public class CategoryService {
         Category category=this.categoryRepository.findById(id)
                 .orElseThrow(()-> new EntitiesNotFoundException("This category doesn't exist"));
         return CategoryMappers.modelToDto(category);
+    }
+
+    @Transactional
+    public CategoryDto update(CategoryRequestDto categoryDto, UUID id) {
+        try{
+            Category category=this.categoryRepository.getReferenceById(id);
+            CategoryMappers.dtoToModel(category,categoryDto);
+            category=this.categoryRepository.save(category);
+            return CategoryMappers.modelToDto(category);
+        }catch(EntitiesNotFoundException e){
+            throw new EntitiesNotFoundException("This category doesn't exist");
+        }
+
+    }
+
+    public void delete(UUID id){
+        try{
+            Category category=this.categoryRepository.getReferenceById(id);
+            this.categoryRepository.delete(category);
+        }catch(EntitiesNotFoundException e){
+            throw new EntitiesNotFoundException("This category doesn't exist");
+        } /*catch (DataIntegrityViolationException e) {
+
+            throw new IntegityException("This insurance Company id: " + id + " has related child entities and cannot be deleted");
+        }*/
     }
 }
