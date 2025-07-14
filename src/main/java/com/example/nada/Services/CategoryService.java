@@ -8,6 +8,8 @@ import com.example.nada.Models.Category;
 import com.example.nada.Repositories.CategoryRepository;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +28,13 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<CategoryDto> getAllCategories(){
-
-            List<Category> categories = categoryRepository.findAll();
+    public Page<CategoryDto> getAllCategories(Pageable pageable){
 
 
 
-        return categories.stream().map(CategoryMappers::modelToDto).collect(Collectors.toList());
+
+
+        return this.categoryRepository.findAll(pageable).map(CategoryMappers::modelToDto);
     }
 
     @Transactional

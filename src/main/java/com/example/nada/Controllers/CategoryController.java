@@ -4,10 +4,15 @@ import com.example.nada.Dtos.CategoryDto.CategoryDto;
 import com.example.nada.Dtos.CategoryDto.CategoryRequestDto;
 import com.example.nada.Models.Category;
 import com.example.nada.Services.CategoryService;
+import com.example.nada.Wrappers.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +35,18 @@ public class CategoryController {
 
     @Operation(summary= "Show all categories")
     @GetMapping
-    public ResponseEntity<Map<String,Object>> index(){
+    public ResponseEntity<ApiResponse<Page<CategoryDto>>> index(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy
+    ){
+        Pageable pageable= PageRequest.of(page,size, Sort.by(sortBy).descending());
+            Page<CategoryDto> categories=this.categoryService.getAllCategories(pageable);
 
-            List<CategoryDto> categories=this.categoryService.getAllCategories();
-            Map<String,Object> response=new HashMap<>();
-            response.put("message","Category found Successfully");
-            response.put("data",categories);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse<>("Category found successfuly",HttpStatus.OK.value(), categories)
+        );
     }
 
     @Operation(summary = "Create a new Category")
