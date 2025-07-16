@@ -3,7 +3,7 @@ package com.example.nada.Services;
 import com.example.nada.Dtos.PublisherDto.PublisherDto;
 import com.example.nada.Dtos.PublisherDto.PublisherRequestDto;
 import com.example.nada.Exceptions.EntitiesNotFoundException;
-import com.example.nada.Mappers.PublisherMapper;
+import com.example.nada.Mappers.PublisherMappers;
 import com.example.nada.Models.Publisher;
 import com.example.nada.Repositories.PublisherRespository;
 import org.springframework.data.domain.Page;
@@ -16,25 +16,24 @@ import java.util.UUID;
 @Service
 public class PublisherService {
     private final PublisherRespository publisherRespository;
+    private final PublisherMappers publisherMappers;
 
-    public PublisherService(PublisherRespository publisherRespository){
+    public PublisherService(PublisherRespository publisherRespository, PublisherMappers publisherMappers){
         this.publisherRespository=publisherRespository;
+        this.publisherMappers=publisherMappers;
     }
 
     @Transactional(readOnly = true)
     public Page<PublisherDto> getAll(Pageable pageable) {
-        return this.publisherRespository.findAll(pageable).map(PublisherMapper::modelToDto);
+        return this.publisherRespository.findAll(pageable).map(publisherMappers::toDto);
     }
 
     @Transactional
     public PublisherDto store(PublisherRequestDto dto){
-        Publisher publisher= new Publisher();
-        PublisherMapper.dtoToModel(publisher, dto);
+        Publisher publisher=this.publisherMappers.toEntity(dto);
+        Publisher publiserSave=this.publisherRespository.save(publisher);
 
-        publisher=this.publisherRespository.save(publisher);
-
-        return PublisherMapper.modelToDto(publisher);
-
+        return this.publisherMappers.toDto(publiserSave);
     }
     @Transactional(readOnly = true)
     public PublisherDto show(UUID id) {
@@ -42,7 +41,7 @@ public class PublisherService {
         Publisher publisher=this.publisherRespository.findById(id).
                 orElseThrow(()-> new EntitiesNotFoundException("this publisher doesn't exist"));
 
-        return PublisherMapper.modelToDto(publisher);
+        return this.publisherMappers.toDto(publisher);
     }
 
     @Transactional
