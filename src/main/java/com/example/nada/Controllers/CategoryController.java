@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -51,7 +52,7 @@ public class CategoryController {
 
     @Operation(summary = "Create a new Category")
     @PostMapping
-    public ResponseEntity<Map<String,Object>> store(@RequestBody CategoryRequestDto category){
+    public ResponseEntity<Map<String,Object>> store(@Valid @RequestBody CategoryRequestDto category){
         CategoryDto categoryDto=this.categoryService.saveCategory(category);
         Map<String,Object> response= new HashMap<>();
         response.put("message","Category created successfully");

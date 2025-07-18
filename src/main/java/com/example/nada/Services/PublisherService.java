@@ -53,4 +53,16 @@ public class PublisherService {
             throw new EntitiesNotFoundException("this publisher doesn't exist");
         }
     }
+
+    @Transactional
+    public PublisherDto update(UUID id, PublisherRequestDto dto) {
+        try {
+            Publisher publisher = this.publisherRespository.getReferenceById(id);
+            this.publisherMappers.updateEntityFromDto(dto,publisher);
+            publisher=this.publisherRespository.save(publisher);
+            return this.publisherMappers.toDto(publisher);
+        }catch (EntitiesNotFoundException e){
+            throw new EntitiesNotFoundException("this publisher doesn't exist");
+        }
+    }
 }

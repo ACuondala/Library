@@ -1,6 +1,10 @@
 package com.example.nada.Dtos.PublisherDto;
 
-public record PublisherRequestDto(String name,
+import jakarta.validation.constraints.NotBlank;
+
+public record PublisherRequestDto(
+        @NotBlank(message = "{PublisherRequestDto.name.NotBlank}")
+        String name,
 
                                   String description,
                                   String country,

@@ -3,7 +3,10 @@ package com.example.nada.Mappers;
 import com.example.nada.Dtos.PublisherDto.PublisherDto;
 import com.example.nada.Dtos.PublisherDto.PublisherRequestDto;
 import com.example.nada.Models.Publisher;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
@@ -14,5 +17,6 @@ public interface PublisherMappers {
 
     Publisher toEntity(PublisherRequestDto publisherDto);
 
-    List<PublisherDto> toDtoList(List<Publisher> publishers);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+   void updateEntityFromDto(PublisherRequestDto dto, @MappingTarget Publisher publisher);
 }

@@ -1,11 +1,13 @@
 package com.example.nada.Controllers;
 
+import com.example.nada.Dtos.CategoryDto.CategoryDto;
 import com.example.nada.Dtos.PublisherDto.PublisherDto;
 import com.example.nada.Dtos.PublisherDto.PublisherRequestDto;
 import com.example.nada.Services.PublisherService;
 import com.example.nada.Wrappers.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +43,7 @@ public class PublisherController {
 
     @Operation(summary = "create a new Publisher")
     @PostMapping
-    public ResponseEntity<ApiResponse<PublisherDto>> store(@RequestBody PublisherRequestDto publisherRequestDto){
+    public ResponseEntity<ApiResponse<PublisherDto>> store(@Valid @RequestBody PublisherRequestDto publisherRequestDto){
         PublisherDto publisherDto= this.publisherService.store(publisherRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse<>("Publisher created successfully", HttpStatus.CREATED.value(), publisherDto)
@@ -58,6 +60,16 @@ public class PublisherController {
                 HttpStatus.OK.value(),
                 dto
         ));
+    }
+
+    @Operation(summary = "Update a single Publisher")
+    @PutMapping(value="/{id}")
+    public ResponseEntity<ApiResponse<PublisherDto>> update(@PathVariable UUID id, @Valid @RequestBody PublisherRequestDto dto){
+        PublisherDto publisherDto=this.publisherService.update(id,dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse<>("Publisher updated successfuly", 200, publisherDto)
+        );
     }
 
 
