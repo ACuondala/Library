@@ -1,12 +1,14 @@
 package com.example.nada.Services;
 
 import com.example.nada.Dtos.CategoryDto.CategoryDto;
+import com.example.nada.Dtos.CategoryDto.CategoryFilter;
 import com.example.nada.Dtos.CategoryDto.CategoryRequestDto;
 import com.example.nada.Exceptions.EntitiesNotFoundException;
 import com.example.nada.Mappers.CategoryMapper;
 import com.example.nada.Models.Category;
 import com.example.nada.Repositories.CategoryRepository;
 
+import com.example.nada.Specification.CategorySpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,8 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CategoryDto> getAllCategories(Pageable pageable){
-        return this.categoryRepository.findAll(pageable).map(categoryMapper::toDto);
+    public Page<CategoryDto> getAllCategories(CategoryFilter filter,Pageable pageable){
+        return this.categoryRepository.findAll(CategorySpecification.filterBy(filter),pageable).map(categoryMapper::toDto);
     }
 
     @Transactional

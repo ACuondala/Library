@@ -5,8 +5,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -35,4 +39,11 @@ public class Author {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String biografia;
+
+    @ManyToMany(mappedBy = "authors")
+    private Set<Books> books= new HashSet<>();
+
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private Instant createdAt;
 }

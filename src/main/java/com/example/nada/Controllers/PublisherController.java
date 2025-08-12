@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +31,14 @@ public class PublisherController {
     @Operation(summary = "show all Publisher")
     @GetMapping
     public ResponseEntity<ApiResponse<Page<PublisherDto>>> index(
-            @RequestParam (defaultValue = "0") int page,
+            /*@RequestParam (defaultValue = "0") int page,
             @RequestParam (defaultValue = "10") int size,
-            @RequestParam(defaultValue = "name") String sortBy
+            @RequestParam(defaultValue = "name") String sortBy*/
+
+            @PageableDefault(page=1,size=10,sort="id", direction=Sort.Direction.DESC) Pageable pageable
     ){
 
-        Pageable pageable= PageRequest.of(page,size, Sort.by(sortBy).descending());
+        //Pageable pageable= PageRequest.of(page,size, Sort.by(sortBy).descending());
         Page<PublisherDto> publisherDto=this.publisherService.getAll(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse<>("publisher found successfuly",HttpStatus.OK.value(), publisherDto));

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -21,6 +23,9 @@ public class Category {
     private UUID id;
 
     private String name;
+
+    @ManyToMany(mappedBy = "categories")
+    public Set<Books> books= new HashSet<>();
 
     @Column(name = "created_at")
     @CreationTimestamp
