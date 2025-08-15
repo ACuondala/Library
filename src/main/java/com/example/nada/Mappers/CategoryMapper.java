@@ -3,10 +3,7 @@ package com.example.nada.Mappers;
 import com.example.nada.Dtos.CategoryDto.CategoryDto;
 import com.example.nada.Dtos.CategoryDto.CategoryRequestDto;
 import com.example.nada.Models.Category;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -16,8 +13,10 @@ public interface CategoryMapper {
 
     CategoryDto toDto(Category category);
 
+    @Mapping(target = "books", ignore = true) // 🔹 Ignorar para não bagunçar o name
     Category toEntity(CategoryRequestDto categoryDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "books", ignore = true) // 🔹 Ignorar para não bagunçar o name
     void updateEntityFromDto(CategoryRequestDto dto, @MappingTarget Category category);
 }

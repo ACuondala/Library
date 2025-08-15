@@ -22,5 +22,6 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public Page<BookDto> getAll(Pageable pageable) {
+        return this.bookRepository.findAll(pageable).map(this.bookMapper::toDto);
     }
 }

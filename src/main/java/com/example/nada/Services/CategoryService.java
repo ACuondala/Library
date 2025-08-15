@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -29,17 +31,17 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CategoryDto> getAllCategories(CategoryFilter filter,Pageable pageable){
-        return this.categoryRepository.findAll(CategorySpecification.filterBy(filter),pageable).map(categoryMapper::toDto);
+    public Page<CategoryDto> getAllCategories(Pageable pageable){
+        return this.categoryRepository.findAll(pageable).map(categoryMapper::toDto);
     }
 
     @Transactional
     public CategoryDto saveCategory(CategoryRequestDto dto) {
         Category category= this.categoryMapper.toEntity(dto);
 
-        Category save=this.categoryRepository.save(category);
+        Category categorySaved=this.categoryRepository.save(category);
 
-        return this.categoryMapper.toDto(category);
+        return this.categoryMapper.toDto(categorySaved);
     }
 
     @Transactional(readOnly = true)

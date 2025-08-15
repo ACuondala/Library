@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -30,4 +31,6 @@ public class Category {
     @Column(name = "created_at")
     @CreationTimestamp
     private Instant createdAt;
+
+
 }

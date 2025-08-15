@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,11 +40,11 @@ public class CategoryController {
     @Operation(summary= "Show all categories")
     @GetMapping
     public ResponseEntity<ApiResponse<Page<CategoryDto>>> index(
-            CategoryFilter filter,
-            @PageableDefault(page=1,size = 10,sort="id", direction=Sort.Direction.DESC) Pageable pageable
+            @ParameterObject
+            @PageableDefault(page=0,size = 10,sort="createdAt", direction=Sort.Direction.DESC) Pageable pageable
     ){
-        //Pageable pageable= PageRequest.of(page,size, Sort.by(sortBy).descending());
-            Page<CategoryDto> categories=this.categoryService.getAllCategories(filter,pageable);
+
+            Page<CategoryDto> categories=this.categoryService.getAllCategories(pageable);
 
 
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -53,44 +54,43 @@ public class CategoryController {
 
     @Operation(summary = "Create a new Category")
     @PostMapping
-    public ResponseEntity<Map<String,Object>> store(@Valid @RequestBody CategoryRequestDto category){
+    public ResponseEntity<ApiResponse<CategoryDto>> store(@Valid @RequestBody CategoryRequestDto category){
         CategoryDto categoryDto=this.categoryService.saveCategory(category);
-        Map<String,Object> response= new HashMap<>();
-        response.put("message","Category created successfully");
-        response.put("data",categoryDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponse<>("Category created successfuly",201,categoryDto)
+        );
     }
 
     @Operation(summary = "Show a single category")
     @GetMapping(value="/{id}")
-    public ResponseEntity<Map<String,Object>> show(@PathVariable UUID id){
+    public ResponseEntity<ApiResponse<CategoryDto>> show(@PathVariable UUID id){
         CategoryDto categoryDto=this.categoryService.show(id);
-        Map<String,Object> response= new HashMap<>();
-        response.put("message","Category created successfully");
-        response.put("data",categoryDto);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse<>("Category found successfuly",200,categoryDto)
+        );
     }
 
 
     @Operation(summary="Update a category")
     @PutMapping(value="/{id}")
-    public ResponseEntity<Map<String,Object>>update(@RequestBody CategoryRequestDto categoryDto, @PathVariable UUID id){
+    public ResponseEntity<ApiResponse<CategoryDto>>update(@RequestBody CategoryRequestDto categoryDto, @PathVariable UUID id){
 
         CategoryDto dto=this.categoryService.update(categoryDto,id);
 
-        Map<String,Object> response= new HashMap<>();
-        response.put("message","Category created successfully");
-        response.put("data",dto);
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse<>("Category updated successfuly",200,dto)
+        );
     }
 
     @Operation(summary = "Delete a category")
     @DeleteMapping(value="/{id}")
-    public ResponseEntity<Map<String, String >> delete(@PathVariable UUID id){
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable UUID id){
         this.categoryService.delete(id);
-        Map<String,String> response= new HashMap<>();
-        response.put("message","Category ");
-        return ResponseEntity.ok(response);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+                new ApiResponse<>("Category deleted successfuly",204)
+        );
     }
 }
