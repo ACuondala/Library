@@ -31,17 +31,13 @@ public class PublisherController {
     @Operation(summary = "show all Publisher")
     @GetMapping
     public ResponseEntity<ApiResponse<Page<PublisherDto>>> index(
-            /*@RequestParam (defaultValue = "0") int page,
-            @RequestParam (defaultValue = "10") int size,
-            @RequestParam(defaultValue = "name") String sortBy*/
 
             @PageableDefault(page=1,size=10,sort="id", direction=Sort.Direction.DESC) Pageable pageable
     ){
 
-        //Pageable pageable= PageRequest.of(page,size, Sort.by(sortBy).descending());
         Page<PublisherDto> publisherDto=this.publisherService.getAll(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse<>("publisher found successfuly",HttpStatus.OK.value(), publisherDto));
+                new ApiResponse<>("publisher found successfully",HttpStatus.OK.value(), publisherDto));
     }
 
     @Operation(summary = "create a new Publisher")
