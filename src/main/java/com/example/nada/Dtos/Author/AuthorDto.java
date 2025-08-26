@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Lob;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record AuthorDto(
@@ -15,6 +16,7 @@ public record AuthorDto(
          String phone,
          LocalDate dob,
           String photo,
-         String biografia
+         String biografia,
+         LocalDateTime createdAt
 ) {
 }

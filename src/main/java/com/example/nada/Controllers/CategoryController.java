@@ -41,7 +41,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<CategoryDto>>> index(
             @ParameterObject
-            @PageableDefault(page=0,size = 10,sort="createdAt", direction=Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(page=0,size = 10,sort="id", direction=Sort.Direction.DESC) Pageable pageable
     ){
 
             Page<CategoryDto> categories=this.categoryService.getAllCategories(pageable);

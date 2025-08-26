@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -23,27 +24,12 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-
     private String name;
-
-    @Column(nullable = true)
-    private String pseudonym;
-
-    private String email;
-    private String phone;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dob;
-    private String photo;
-
-    @Lob
-    @Column(columnDefinition = "TEXT")
-    private String biografia;
 
     @ManyToMany(mappedBy = "authors")
     private Set<Books> books= new HashSet<>();
 
     @Column(name = "created_at")
     @CreationTimestamp
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 }

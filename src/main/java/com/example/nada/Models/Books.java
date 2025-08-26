@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -39,6 +40,11 @@ public class Books {
     @Column(name = "number_of_page")
     private Integer numberOfPage;
 
+    private Integer qtd;
+
+    @Column(name="qtd_available")
+    private Integer qtdAvailable;
+
     @ManyToMany
     @JoinTable(name="author_books", // middle table
                 joinColumns=@JoinColumn(name="book_id"), // must be id of this class
@@ -62,7 +68,7 @@ public class Books {
 
 
     @Column(name="created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
 
 }

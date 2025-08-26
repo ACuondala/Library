@@ -30,7 +30,7 @@ public class Category {
 
     @Column(name = "created_at")
     @CreationTimestamp
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
 
 }

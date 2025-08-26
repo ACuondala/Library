@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -23,16 +24,9 @@ public class Publisher {
 
     private String name;
 
-    private String description;
-    private String country;
-    private String email;
-    private String phone;
-    private String website;
-    @Column(name="founded_at")
-    private String foundedAt;
     @Column(name="created_at")
     @CreationTimestamp
-    public Instant createdAt;
+    public LocalDateTime createdAt;
 
     @ManyToMany(mappedBy = "publishers")
     public Set<Books> books= new HashSet<>();

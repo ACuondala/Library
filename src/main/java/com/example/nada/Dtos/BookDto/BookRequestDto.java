@@ -15,11 +15,14 @@ public record BookRequestDto(
         @NotBlank String isbn,
         @NotBlank String title,
         String subTitle,
+        String authorName,
         @NotNull LocalDate publishDate,
         @NotBlank String formate,
         @NotNull @Min(1) Integer numberOfPage,
-        @NotNull Set<UUID> authors,
-        @NotNull Set<UUID> publishers,
-        @NotNull Set<UUID> categories
+         UUID authors,
+        @NotNull UUID publishers,
+        @NotNull Set<UUID> categories,
+               @NotNull @Min(1) Integer qtd,
+        @NotNull @Min(0) Integer qtdAvailable
 ) {
 }

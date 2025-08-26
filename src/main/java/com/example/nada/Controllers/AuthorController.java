@@ -6,6 +6,7 @@ import com.example.nada.Services.AuthorService;
 import com.example.nada.Wrappers.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,9 +32,7 @@ public class AuthorController {
     @Operation(description = "Show all author")
     @GetMapping
     public ResponseEntity<ApiResponse<Page<AuthorDto>>> index(
-            /*@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "name") String sortBy*/
+            @ParameterObject
 
             @PageableDefault(page=0,size=10,sort="id", direction=Sort.Direction.DESC) Pageable pageable
 

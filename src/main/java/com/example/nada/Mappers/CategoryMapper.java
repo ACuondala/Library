@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel="spring")
 public interface CategoryMapper {
 
-
+    //@Mapping(target = "createdAt", expression = "java(toInstant(category.getCreatedAt()))")
     CategoryDto toDto(Category category);
 
     @Mapping(target = "books", ignore = true) // 🔹 Ignorar para não bagunçar o name
