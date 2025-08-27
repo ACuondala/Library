@@ -79,9 +79,7 @@ public class BooksService {
             throw new IllegalArgumentException("the field must be filled");
         }
 
-        String normalizedName = Arrays.stream(name.trim().toLowerCase().split("\\s+"))
-                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
-                .collect(Collectors.joining(" "));
+        String normalizedName =this.normalizeName(name);
 
         return this.authorRepository.findByName(normalizedName)
                 .orElseGet(()->{
@@ -89,5 +87,11 @@ public class BooksService {
                     newAuthor.setName(normalizedName);
                     return this.authorRepository.save(newAuthor);
                 });
+    }
+
+    private String normalizeName(String name) {
+        return Arrays.stream(name.trim().toLowerCase().split("\\s+"))
+                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
+                .collect(Collectors.joining(" "));
     }
 }
