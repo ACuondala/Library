@@ -1,7 +1,7 @@
 package com.example.nada.Controllers;
 
-import com.example.nada.Dtos.BookDto.BookDto;
-import com.example.nada.Dtos.BookDto.BookRequestDto;
+import com.example.nada.Dtos.Books.BooksDto;
+import com.example.nada.Dtos.Books.BookRequestDto;
 import com.example.nada.Dtos.CategoryDto.CategoryDto;
 import com.example.nada.Services.BooksService;
 import com.example.nada.Wrappers.ApiResponse;
@@ -32,36 +32,36 @@ public class BookController {
 
     @Operation(description = "Show all books")
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<BookDto>>>index(
+    public ResponseEntity<ApiResponse<Page<BooksDto>>>index(
             @ParameterObject
             @PageableDefault(page=0,size = 10, sort="id") Pageable pageable
     ){
-        Page<BookDto> bookDtos=this.booksService.getAll(pageable);
+        Page<BooksDto> booksDtos=this.booksService.getAll(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse<>(
                         "Books find successfully",
                         200,
-                        bookDtos
+                        booksDtos
                 )
         );
     }
 
     @Operation(description = "Get one book")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ApiResponse<BookDto>> show(@PathVariable UUID id){
-        BookDto bookDto= this.booksService.show(id);
+    public ResponseEntity<ApiResponse<BooksDto>> show(@PathVariable UUID id){
+        BooksDto booksDto= this.booksService.show(id);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse<>("Book found successfully",200, bookDto)
+                new ApiResponse<>("Book found successfully",200, booksDto)
         );
     }
 
     @Operation(description="Create a new book")
     @PostMapping
-    public ResponseEntity<ApiResponse<BookDto>> create(@RequestBody BookRequestDto bookRequestDto){
-        BookDto bookDto= this.booksService.create(bookRequestDto);
+    public ResponseEntity<ApiResponse<BooksDto>> create(@RequestBody BookRequestDto bookRequestDto){
+        BooksDto booksDto= this.booksService.create(bookRequestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ApiResponse<>("book created successfully", 201, bookDto)
+                new ApiResponse<>("book created successfully", 201, booksDto)
         );
     }
 }

@@ -28,9 +28,6 @@ public class Books {
 
     private String title;
 
-    @Column(name = "sub_title", nullable = true)
-    private String subTitle;
-
     @Column(name = "publish_date")
     private LocalDate publishDate;
 

@@ -1,19 +1,18 @@
 package com.example.nada.Mappers;
 
-import com.example.nada.Dtos.BookDto.BookDto;
-import com.example.nada.Dtos.BookDto.BookRequestDto;
+import com.example.nada.Dtos.Books.BooksDto;
+import com.example.nada.Dtos.Books.BookRequestDto;
 import com.example.nada.Models.Books;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-    BookDto toDto(Books book);
-
+    BooksDto toDto(Books book);
+    @Mapping(target = "authors", ignore = true) // vamos tratar manualmente
+    @Mapping(target = "publishers", ignore = true)
+    @Mapping(target = "categories", ignore = true)
     Books toModel(BookRequestDto bookRequestDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
