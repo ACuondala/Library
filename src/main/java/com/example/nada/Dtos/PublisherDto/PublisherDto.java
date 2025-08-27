@@ -7,18 +7,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record PublisherDto(UUID id,
-
+public record PublisherDto(
+        UUID id,
         String name,
-
-       String description,
-       String country,
-         String email,
-         String phone,
-        String website,
-
- String foundedAt,
-
-
-                           LocalDateTime createdAt) {
+        LocalDateTime createdAt) {
 }

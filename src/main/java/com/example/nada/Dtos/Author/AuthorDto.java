@@ -11,12 +11,5 @@ import java.util.UUID;
 public record AuthorDto(
          UUID id,
         String name,
-        String pseudonym,
-         String email,
-         String phone,
-         LocalDate dob,
-          String photo,
-         String biografia,
-         LocalDateTime createdAt
-) {
-}
+        LocalDateTime createdAt
+) {}

@@ -13,6 +13,7 @@ public record BookRequestDto(
         @NotBlank String title,
         Set<String> authorName,
         Set<String> publisherNames,
+        Set<String> categoryName,
         @NotNull LocalDate publishDate,
         @NotBlank String formate,
         @NotNull @Min(1) Integer numberOfPage,

@@ -6,16 +6,20 @@ import com.example.nada.Models.Books;
 import org.mapstruct.*;
 
 
-@Mapper(componentModel = "spring")
-public interface BookMapper {
+@Mapper(componentModel="spring")
+public interface BooksMapper {
 
     BooksDto toDto(Books book);
+
     @Mapping(target = "authors", ignore = true) // vamos tratar manualmente
     @Mapping(target = "publishers", ignore = true)
     @Mapping(target = "categories", ignore = true)
     Books toModel(BookRequestDto bookRequestDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "authors", ignore = true)
+    @Mapping(target = "publishers", ignore = true)
+    @Mapping(target = "categories", ignore = true)
     void UpadateEntityFromDto(BookRequestDto bookRequestDto, @MappingTarget Books books);
 
 }
