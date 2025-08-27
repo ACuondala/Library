@@ -76,7 +76,7 @@ public class BooksService {
                     .orElseThrow(()-> new EntitiesNotFoundException("This author id doesn't exist"));
         }
         if(name == null || name.isBlank()){
-            throw new IllegalArgumentException("the field must be filled");
+            throw new IllegalArgumentException("the field must be filleds");
         }
 
         String normalizedName =this.normalizeName(name);
