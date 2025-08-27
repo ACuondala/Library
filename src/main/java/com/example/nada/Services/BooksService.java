@@ -125,7 +125,7 @@ public class BooksService {
     private Author getOrCreateAuthor(UUID id, String name){
         if(id != null){
             return this.authorRepository.findById(id)
-                    .orElseThrow(()-> new EntitiesNotFoundException("This author id doesn't exist"));
+                    .orElseThrow(()-> new EntitiesNotFoundException("This authors id doesn't exist"));
         }
         if(name == null || name.isBlank()){
             throw new IllegalArgumentException("the field must be filleds");
