@@ -61,16 +61,16 @@ public class BooksService {
     public BooksDto create(BookRequestDto bookRequestDto) {
         Books books=this.bookMapper.toModel(bookRequestDto);
 
-        Set<Author> authors= new TreeSet<>();
-        if(bookRequestDto.authors() != null){
-            for(UUID id: bookRequestDto.authors()){
+        Set<Author> authors= new HashSet<>();
+        if(bookRequestDto.authorIds() != null){
+            for(UUID id: bookRequestDto.authorIds()){
                 authors.add(this.getOrCreateAuthor(id,null));
             }
 
         }
-        if(bookRequestDto.authorName()!= null && !bookRequestDto.authorName().isEmpty()){
+        if(bookRequestDto.authorNames()!= null && !bookRequestDto.authorNames().isEmpty()){
             authors.addAll(
-                    bookRequestDto.authorName().stream()
+                    bookRequestDto.authorNames().stream()
                             .filter(name -> name != null && !name.isBlank()) // ignora nulos/vazios
                             .map(name -> this.getOrCreateAuthor(null, name))
                             .collect(Collectors.toSet())
@@ -79,10 +79,10 @@ public class BooksService {
 
         books.setAuthors(authors);
 
-        Set<Publisher> publishers= new TreeSet<>();
+        Set<Publisher> publishers= new HashSet<>();
 
-        if(bookRequestDto.publishers() != null){
-            for(UUID id: bookRequestDto.publishers()){
+        if(bookRequestDto.publisherIds() != null){
+            for(UUID id: bookRequestDto.publisherIds()){
                 publishers.add(this.getOrCreatePublisher(id, null));
             }
         }
@@ -90,7 +90,7 @@ public class BooksService {
         if(bookRequestDto.publisherNames() != null && !bookRequestDto.publisherNames().isEmpty()){
 
             publishers.addAll(bookRequestDto.publisherNames().stream()
-                    .filter(name->name != null && name.isBlank())
+                    .filter(name->name != null && !name.isBlank())
                     .map(name->this.getOrCreatePublisher(null, name))
                     .collect(Collectors.toSet())
             );
@@ -98,17 +98,17 @@ public class BooksService {
 
         books.setPublishers(publishers);
 
-        Set<Category> categories= new TreeSet<>();
+        Set<Category> categories= new HashSet<>();
 
-        if(bookRequestDto.categories() != null){
-            for(UUID id: bookRequestDto.categories()){
+        if(bookRequestDto.categoryIds() != null){
+            for(UUID id: bookRequestDto.categoryIds()){
                 categories.add(this.getOrcreateCategory(id, null));
             }
         }
 
-        if(bookRequestDto.categoryName() != null && !bookRequestDto.categoryName().isEmpty()){
-            categories.addAll(bookRequestDto.categoryName().stream()
-                    .filter(name-> name != null && name.isBlank())
+        if(bookRequestDto.categoryNames() != null && !bookRequestDto.categoryNames().isEmpty()){
+            categories.addAll(bookRequestDto.categoryNames().stream()
+                    .filter(name-> name != null && !name.isBlank())
                     .map(name->this.getOrcreateCategory(null,name))
                     .collect(Collectors.toSet())
             );
@@ -118,8 +118,77 @@ public class BooksService {
 
         books= this.bookRepository.save(books);
         return this.bookMapper.toDto(books);
+    }
 
+    @Transactional
+    public BooksDto update(UUID id, BookRequestDto bookRequestDto) {
+        Books existingBook = this.bookRepository.findById(id)
+                .orElseThrow(() -> new EntitiesNotFoundException("Book with id " + id + " doesn't exist"));
 
+        // Update the existing book with new data
+        this.bookMapper.UpadateEntityFromDto(bookRequestDto, existingBook);
+
+        // Handle authors
+        Set<Author> authors = new HashSet<>();
+        if (bookRequestDto.authorIds() != null) {
+            for (UUID authorId : bookRequestDto.authorIds()) {
+                authors.add(this.getOrCreateAuthor(authorId, null));
+            }
+        }
+        if (bookRequestDto.authorNames() != null && !bookRequestDto.authorNames().isEmpty()) {
+            authors.addAll(
+                    bookRequestDto.authorNames().stream()
+                            .filter(name -> name != null && !name.isBlank())
+                            .map(name -> this.getOrCreateAuthor(null, name))
+                            .collect(Collectors.toSet())
+            );
+        }
+
+        // Handle publishers
+        Set<Publisher> publishers = new HashSet<>();
+        if (bookRequestDto.publisherIds() != null) {
+            for (UUID publisherId : bookRequestDto.publisherIds()) {
+                publishers.add(this.getOrCreatePublisher(publisherId, null));
+            }
+        }
+        if (bookRequestDto.publisherNames() != null && !bookRequestDto.publisherNames().isEmpty()) {
+            publishers.addAll(bookRequestDto.publisherNames().stream()
+                    .filter(name -> name != null && !name.isBlank())
+                    .map(name -> this.getOrCreatePublisher(null, name))
+                    .collect(Collectors.toSet())
+            );
+        }
+
+        // Handle categories
+        Set<Category> categories = new HashSet<>();
+        if (bookRequestDto.categoryIds() != null) {
+            for (UUID categoryId : bookRequestDto.categoryIds()) {
+                categories.add(this.getOrcreateCategory(categoryId, null));
+            }
+        }
+        if (bookRequestDto.categoryNames() != null && !bookRequestDto.categoryNames().isEmpty()) {
+            categories.addAll(bookRequestDto.categoryNames().stream()
+                    .filter(name -> name != null && !name.isBlank())
+                    .map(name -> this.getOrcreateCategory(null, name))
+                    .collect(Collectors.toSet())
+            );
+        }
+
+        // Set relationships
+        existingBook.setAuthors(authors);
+        existingBook.setPublishers(publishers);
+        existingBook.setCategories(categories);
+
+        // Save the updated book
+        existingBook = this.bookRepository.save(existingBook);
+        return this.bookMapper.toDto(existingBook);
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        Books book = this.bookRepository.findById(id)
+                .orElseThrow(() -> new EntitiesNotFoundException("Book with id " + id + " doesn't exist"));
+        this.bookRepository.delete(book);
     }
 
     private Author getOrCreateAuthor(UUID id, String name){

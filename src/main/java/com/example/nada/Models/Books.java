@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -42,21 +43,21 @@ public class Books {
     @Column(name="qtd_available")
     private Integer qtdAvailable;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name="author_books", // middle table
                 joinColumns=@JoinColumn(name="book_id"), // must be id of this class
                 inverseJoinColumns=@JoinColumn(name="author_id") // must be id of other class
              )
     private Set<Author> authors= new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE})
     @JoinTable(name="book_publisher", //middle table
                 joinColumns=@JoinColumn(name="book_id"), // must be id of this class
                 inverseJoinColumns = @JoinColumn(name="publisher_id") // this must be the id of ohter class
     )
     private Set<Publisher> publishers= new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinTable(name="book_category", //middle table
                 joinColumns=@JoinColumn(name = "book_id"), // must be id of this class
                 inverseJoinColumns=@JoinColumn(name = "category_id") // this must be the id of ohter class
@@ -65,6 +66,7 @@ public class Books {
 
 
     @Column(name="created_at")
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
 

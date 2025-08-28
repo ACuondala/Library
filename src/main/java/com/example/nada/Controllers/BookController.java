@@ -64,4 +64,22 @@ public class BookController {
                 new ApiResponse<>("book created successfully", 201, booksDto)
         );
     }
+
+    @Operation(description="Update an existing book")
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ApiResponse<BooksDto>> update(@PathVariable UUID id, @RequestBody BookRequestDto bookRequestDto){
+        BooksDto booksDto = this.booksService.update(id, bookRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse<>("Book updated successfully", 200, booksDto)
+        );
+    }
+
+    @Operation(description="Delete a book")
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable UUID id){
+        this.booksService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+                new ApiResponse<>("Book deleted successfully", 204, null)
+        );
+    }
 }

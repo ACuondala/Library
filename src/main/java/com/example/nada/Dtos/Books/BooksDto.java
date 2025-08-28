@@ -1,6 +1,9 @@
 package com.example.nada.Dtos.Books;
 
 import com.example.nada.Controllers.AuthorController;
+import com.example.nada.Dtos.Author.AuthorDto;
+import com.example.nada.Dtos.CategoryDto.CategoryDto;
+import com.example.nada.Dtos.PublisherDto.PublisherDto;
 import com.example.nada.Models.Category;
 import com.example.nada.Models.Author;
 import com.example.nada.Models.Publisher;
@@ -16,11 +19,10 @@ public record BooksDto(
         LocalDate publishDate,
         String formate,
         Integer numberOfPage,
-        Set<Author> authors,
+        Set<AuthorDto> authors,
         Integer qtd,
         Integer qtdAvailable,
-        Set<Publisher> publishers,
-        Set<Category> categories,
+        Set<PublisherDto> publishers,
+        Set<CategoryDto> categories,
         LocalDateTime createdAt
-) {
-}
+) {}
