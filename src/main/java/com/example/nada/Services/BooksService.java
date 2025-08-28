@@ -62,61 +62,23 @@ public class BooksService {
         Books books=this.bookMapper.toModel(bookRequestDto);
 
         Set<Author> authors= new HashSet<>();
-        if(bookRequestDto.authorIds() != null){
-            for(UUID id: bookRequestDto.authorIds()){
-                authors.add(this.getOrCreateAuthor(id,null));
-            }
-
-        }
-        if(bookRequestDto.authorNames()!= null && !bookRequestDto.authorNames().isEmpty()){
-            authors.addAll(
-                    bookRequestDto.authorNames().stream()
-                            .filter(name -> name != null && !name.isBlank()) // ignora nulos/vazios
-                            .map(name -> this.getOrCreateAuthor(null, name))
-                            .collect(Collectors.toSet())
-            );
-        }
+        authors=this.addAuthorsToSet(bookRequestDto.authorIds(), bookRequestDto.authorNames(), authors);
 
         books.setAuthors(authors);
 
         Set<Publisher> publishers= new HashSet<>();
+        publishers=this.addPublishersToSet(bookRequestDto.publisherIds(), bookRequestDto.publisherNames(),publishers);
 
-        if(bookRequestDto.publisherIds() != null){
-            for(UUID id: bookRequestDto.publisherIds()){
-                publishers.add(this.getOrCreatePublisher(id, null));
-            }
-        }
-
-        if(bookRequestDto.publisherNames() != null && !bookRequestDto.publisherNames().isEmpty()){
-
-            publishers.addAll(bookRequestDto.publisherNames().stream()
-                    .filter(name->name != null && !name.isBlank())
-                    .map(name->this.getOrCreatePublisher(null, name))
-                    .collect(Collectors.toSet())
-            );
-        }
 
         books.setPublishers(publishers);
 
         Set<Category> categories= new HashSet<>();
+        categories=this.addCategoriesToSet(bookRequestDto.categoryIds(), bookRequestDto.categoryNames(),categories);
 
-        if(bookRequestDto.categoryIds() != null){
-            for(UUID id: bookRequestDto.categoryIds()){
-                categories.add(this.getOrcreateCategory(id, null));
-            }
-        }
-
-        if(bookRequestDto.categoryNames() != null && !bookRequestDto.categoryNames().isEmpty()){
-            categories.addAll(bookRequestDto.categoryNames().stream()
-                    .filter(name-> name != null && !name.isBlank())
-                    .map(name->this.getOrcreateCategory(null,name))
-                    .collect(Collectors.toSet())
-            );
-        }
 
         books.setCategories(categories);
 
-        books= this.bookRepository.save(books);
+        books= this.bookRepository.saveAndFlush(books);
         return this.bookMapper.toDto(books);
     }
 
@@ -130,49 +92,15 @@ public class BooksService {
 
         // Handle authors
         Set<Author> authors = new HashSet<>();
-        if (bookRequestDto.authorIds() != null) {
-            for (UUID authorId : bookRequestDto.authorIds()) {
-                authors.add(this.getOrCreateAuthor(authorId, null));
-            }
-        }
-        if (bookRequestDto.authorNames() != null && !bookRequestDto.authorNames().isEmpty()) {
-            authors.addAll(
-                    bookRequestDto.authorNames().stream()
-                            .filter(name -> name != null && !name.isBlank())
-                            .map(name -> this.getOrCreateAuthor(null, name))
-                            .collect(Collectors.toSet())
-            );
-        }
+        authors=this.addAuthorsToSet(bookRequestDto.authorIds(), bookRequestDto.authorNames(), authors);
 
         // Handle publishers
         Set<Publisher> publishers = new HashSet<>();
-        if (bookRequestDto.publisherIds() != null) {
-            for (UUID publisherId : bookRequestDto.publisherIds()) {
-                publishers.add(this.getOrCreatePublisher(publisherId, null));
-            }
-        }
-        if (bookRequestDto.publisherNames() != null && !bookRequestDto.publisherNames().isEmpty()) {
-            publishers.addAll(bookRequestDto.publisherNames().stream()
-                    .filter(name -> name != null && !name.isBlank())
-                    .map(name -> this.getOrCreatePublisher(null, name))
-                    .collect(Collectors.toSet())
-            );
-        }
+        publishers=this.addPublishersToSet(bookRequestDto.publisherIds(), bookRequestDto.publisherNames(),publishers);
 
         // Handle categories
         Set<Category> categories = new HashSet<>();
-        if (bookRequestDto.categoryIds() != null) {
-            for (UUID categoryId : bookRequestDto.categoryIds()) {
-                categories.add(this.getOrcreateCategory(categoryId, null));
-            }
-        }
-        if (bookRequestDto.categoryNames() != null && !bookRequestDto.categoryNames().isEmpty()) {
-            categories.addAll(bookRequestDto.categoryNames().stream()
-                    .filter(name -> name != null && !name.isBlank())
-                    .map(name -> this.getOrcreateCategory(null, name))
-                    .collect(Collectors.toSet())
-            );
-        }
+        categories=this.addCategoriesToSet(bookRequestDto.categoryIds(), bookRequestDto.categoryNames(),categories);
 
         // Set relationships
         existingBook.setAuthors(authors);
@@ -191,6 +119,26 @@ public class BooksService {
         this.bookRepository.delete(book);
     }
 
+    ////// Auxiliar functions for Authors ///////////////////////
+    private Set<Author> addAuthorsToSet(Set<UUID> authorId, Set<String> authorName, Set<Author> authors){
+        if(authorId != null){
+            for(UUID id: authorId){
+                authors.add(this.getOrCreateAuthor(id,null));
+            }
+
+        }
+
+        if(authorName != null && !authorName.isEmpty()){
+            authors.addAll(
+                    authorName.stream()
+                            .filter(name -> name != null && !name.isBlank()) // ignora nulos/vazios
+                            .map(name -> this.getOrCreateAuthor(null, name))
+                            .collect(Collectors.toSet())
+            );
+        }
+        
+        return authors;
+    }
     private Author getOrCreateAuthor(UUID id, String name){
         if(id != null){
             return this.authorRepository.findById(id)
@@ -210,7 +158,26 @@ public class BooksService {
                 });
     }
 
+    ////// Auxiliar functions for Publishers ///////////////////////
+    private Set<Publisher> addPublishersToSet(Set<UUID> publisherId, Set<String> publisherName, Set<Publisher> publishers){
+        if(publisherId != null){
+            for(UUID id: publisherId){
+                publishers.add(this.getOrCreatePublisher(id,null));
+            }
 
+        }
+
+        if(publisherName != null && !publisherName.isEmpty()){
+            publishers.addAll(
+                    publisherName.stream()
+                            .filter(name -> name != null && !name.isBlank()) // ignora nulos/vazios
+                            .map(name -> this.getOrCreatePublisher(null, name))
+                            .collect(Collectors.toSet())
+            );
+        }
+
+        return publishers;
+    }
     private Publisher getOrCreatePublisher(UUID id, String name){
         if(id != null){
             return this.publisherRespository.findById(id)
@@ -230,7 +197,27 @@ public class BooksService {
                 });
     }
 
-    private Category getOrcreateCategory(UUID id, String name){
+    ////// Auxiliar functions for Categories ///////////////////////
+    private Set<Category> addCategoriesToSet(Set<UUID> categoryId, Set<String> categoryName, Set<Category> categories){
+        if(categoryId != null){
+            for(UUID id: categoryId){
+                categories.add(this.getOrCreateCategory(id,null));
+            }
+
+        }
+
+        if(categoryName != null && !categoryName.isEmpty()){
+            categories.addAll(
+                    categoryName.stream()
+                            .filter(name -> name != null && !name.isBlank()) // ignora nulos/vazios
+                            .map(name -> this.getOrCreateCategory(null, name))
+                            .collect(Collectors.toSet())
+            );
+        }
+
+        return categories;
+    }
+    private Category getOrCreateCategory(UUID id, String name){
         if(id != null){
             return this.categoryRepository.findById(id)
                     .orElseThrow(()-> new EntitiesNotFoundException("This publisher id doesn't exist"));
