@@ -78,7 +78,7 @@ public class BooksService {
 
         books.setCategories(categories);
 
-        books= this.bookRepository.saveAndFlush(books);
+        books= this.bookRepository.save(books);
         return this.bookMapper.toDto(books);
     }
 
@@ -220,7 +220,7 @@ public class BooksService {
     private Category getOrCreateCategory(UUID id, String name){
         if(id != null){
             return this.categoryRepository.findById(id)
-                    .orElseThrow(()-> new EntitiesNotFoundException("This publisher id doesn't exist"));
+                    .orElseThrow(()-> new EntitiesNotFoundException("This category id doesn't exist"));
         }
         if(name == null || name.isBlank()){
             throw new IllegalArgumentException("the field must be filleds");
