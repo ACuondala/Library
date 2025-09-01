@@ -1,6 +1,5 @@
 package com.example.nada.Models;
 
-import com.example.nada.Enums.StudantStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,21 +10,17 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "studants")
 @Data
+@Table(name="teachers")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Studant {
+public class Teacher {
 
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "studant_number", unique = true)
-    private String studantNumber;
-
-    @Enumerated(value = EnumType.STRING)
-    private StudantStatus status;
+    private String discipline;
 
     @OneToOne
     @JoinColumn(name="person_id")
@@ -34,5 +29,4 @@ public class Studant {
     @Column(name="created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
-
 }

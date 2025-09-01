@@ -1,5 +1,6 @@
 package com.example.nada.Models;
 
+import com.example.nada.Enums.KindofUser;
 import com.example.nada.Enums.PersonStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,51 +8,38 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name="persons")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Person {
+public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
     private UUID id;
 
-    private String name;
+    @Column(name = "username")
+    private String userName;
 
     @Column(unique = true)
     private String email;
 
-    @Column(name="phone_number")
-    private String phoneNumber;
-
-    @Column(name="birth_date")
-    private LocalDate birthDate;
-
-    private String gender;
-
+    @Enumerated(value = EnumType.STRING)
+    private KindofUser kindofUser;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private PersonStatus Status;
 
-    @OneToOne(mappedBy = "person")
-    private Studant studant;
-
-
-    @OneToOne(mappedBy = "person")
-    private Employee employee;
-
-    @OneToOne(mappedBy = "person")
-    private Teacher teacher;
+    @OneToOne
+    @JoinColumn(name="person_id")
+    private Person person;
 
     @Column(name="created_at")
     @CreationTimestamp
-    private LocalDateTime created_at;
-
+    private LocalDateTime createdAt;
 }
