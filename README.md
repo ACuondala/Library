@@ -86,6 +86,8 @@ The application follows a layered architecture pattern:
 ┌─────────────────┐
 │   Controllers   │ ← REST API Layer
 ├─────────────────┤
+|       DTO       | ← Data Transfer Object
+├─────────────────┤
 │    Services     │ ← Business Logic Layer
 ├─────────────────┤
 │  Repositories   │ ← Data Access Layer
