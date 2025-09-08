@@ -40,15 +40,7 @@ public class Person {
     @Column(nullable = false)
     private PersonStatus Status;
 
-    @OneToOne(mappedBy = "person")
-    private Studant studant;
 
-
-    @OneToOne(mappedBy = "person")
-    private Employee employee;
-
-    @OneToOne(mappedBy = "person")
-    private Teacher teacher;
 
     @Column(name="created_at")
     @CreationTimestamp

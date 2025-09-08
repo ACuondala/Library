@@ -20,16 +20,10 @@ public record RegisterDto(
      String gender,
 
      PersonStatus Status,
-     // Studant
-     String studantNumber,
 
-     //Employee
-     String cargo,
+     String password
 
-     String earn,
 
-     //teacher
-     String discipline
 
 
 
