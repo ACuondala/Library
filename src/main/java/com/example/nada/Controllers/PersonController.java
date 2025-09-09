@@ -2,6 +2,7 @@ package com.example.nada.Controllers;
 
 import com.example.nada.Dtos.PersonDto.PersonDto;
 import com.example.nada.Dtos.PersonDto.RegisterDto;
+import com.example.nada.Dtos.PersonDto.UpdatePerson;
 import com.example.nada.Models.Person;
 import com.example.nada.Services.PersonService;
 import com.example.nada.Wrappers.ApiResponse;
@@ -64,5 +65,28 @@ public class PersonController {
         );
 
     }
+
+    @PutMapping(value="/{id}")
+    @Operation(description = "update an existing user")
+    public ResponseEntity<ApiResponse<PersonDto>> update(@RequestBody UUID id, UpdatePerson updatePerson){
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse<>("User update successfully",200,
+                        this.personService.update(id, updatePerson)
+                        )
+        );
+    }
+
+    @DeleteMapping(value="/{id}")
+    @Operation(description = "deleting an exist user")
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable UUID id){
+        this.personService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse<>("User deleted successfully",204
+
+                )
+        );
+    }
+
 
 }
