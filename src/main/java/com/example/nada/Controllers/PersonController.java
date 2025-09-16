@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(name="/users")
+@RequestMapping(value="/users")
 @Tag(name = "Users")
 public class PersonController {
     @Autowired
