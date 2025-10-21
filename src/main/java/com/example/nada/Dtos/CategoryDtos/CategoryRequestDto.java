@@ -1,4 +1,8 @@
 package com.example.nada.Dtos.CategoryDtos;
 
-public record CategoryRequestDto(String name) {
+import jakarta.validation.constraints.NotBlank;
+
+public record CategoryRequestDto(
+        @NotBlank(message = "{category.name.notBlank}")
+        String name) {
 }

@@ -5,6 +5,7 @@ import com.example.nada.Dtos.CategoryDtos.CategoryResponseDto;
 import com.example.nada.Mappers.CategoryMapper;
 import com.example.nada.Models.Category;
 import com.example.nada.Repositories.CategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,38 @@ public class CategoryService {
         return this.categoryRepository.findAll(pageable).map(this.categoryMapper::toDto);
     }
 
+
     @Transactional(readOnly = true)
     public CategoryResponseDto show(UUID id) {
+        Category category= this.categoryRepository.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("This category id: "+id+" doesn't exist"));
+
+        return this.categoryMapper.toDto(category);
+    }
+
+    @Transactional
+    public CategoryResponseDto update(CategoryRequestDto dto, UUID id) {
+
+        try{
+
+            Category category= this.categoryRepository.getReferenceById(id);
+
+            this.categoryMapper.updateCategory(dto,category);
+            category=this.categoryRepository.save(category);
+
+            return this.categoryMapper.toDto(category);
+        }catch(RuntimeException e){
+
+        throw new EntityNotFoundException("this category id:"+id+" doesn't exist");
+
+        }
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        Category category=this.categoryRepository.findById(id).
+                orElseThrow(()->new EntityNotFoundException("this category id: "+id+" doesn't exist"));
+
+        this.categoryRepository.delete(category);
     }
 }

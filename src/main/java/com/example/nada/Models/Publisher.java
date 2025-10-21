@@ -10,21 +10,21 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name="categories")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name="publishers")
 @Data
-public class Category {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class Publisher {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+
     private UUID id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(name="created_at")
+    private String country;
+
+    @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
-
 }

@@ -1,5 +1,6 @@
 package com.example.nada.Models;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,21 +11,21 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name="categories")
+@Table(name = "authors")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class Category {
+public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy= GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(name="created_at")
+    private String nacionalidade;
+
+    @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
-
 }

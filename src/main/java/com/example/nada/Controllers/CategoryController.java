@@ -6,6 +6,8 @@ import com.example.nada.Services.CategoryService;
 import com.example.nada.Wrappers.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -44,7 +46,7 @@ public class CategoryController {
 
     @PostMapping
     @Operation(description = "Create a new category")
-    public ResponseEntity<ApiResponse<CategoryResponseDto>> store(@RequestBody CategoryRequestDto categoryRequestDto){
+    public ResponseEntity<ApiResponse<CategoryResponseDto>> store(@Valid @RequestBody CategoryRequestDto categoryRequestDto){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiResponse<>("Category created Successfully",201,this.categoryService.store(categoryRequestDto))
@@ -57,6 +59,26 @@ public class CategoryController {
     public ResponseEntity<ApiResponse<CategoryResponseDto>> show(@PathVariable UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse<>("Category found successfully",200, this.categoryService.show(id))
+        );
+    }
+
+    @PutMapping(value = "/{id}")
+    @Operation(description = "Update a category")
+    public ResponseEntity<ApiResponse<CategoryResponseDto>> update(@RequestBody CategoryRequestDto dto
+            , @PathVariable UUID id){
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse<>("Category updated successfully",200,this.categoryService.update(dto,id))
+        );
+
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @Operation(description = "Delete a category")
+    public ResponseEntity<ApiResponse<String>> delete(@PathVariable UUID id){
+        this.categoryService.delete(id);
+       return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+                new ApiResponse<>("Category Deleted successfully",204)
         );
     }
 
