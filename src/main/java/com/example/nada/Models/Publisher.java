@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -23,6 +25,9 @@ public class Publisher {
     private String name;
 
     private String country;
+
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL)
+    private List<Book>books= new ArrayList<>();
 
     @Column(name = "created_at")
     @CreationTimestamp

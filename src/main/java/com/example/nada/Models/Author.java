@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,6 +26,9 @@ public class Author {
     private String name;
 
     private String nacionalidade;
+
+    @ManyToMany(mappedBy = "authors")
+    private List<Book> books= new ArrayList<>();
 
     @Column(name = "created_at")
     @CreationTimestamp
