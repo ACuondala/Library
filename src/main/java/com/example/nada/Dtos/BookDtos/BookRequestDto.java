@@ -15,7 +15,10 @@ public record BookRequestDto(
         Integer totalQuantity,
         Integer quantityAvailable,
         UUID category,
+        String categoryName,
         List<UUID> authors,
-        UUID publisher
+        List<String> authorsName,
+        UUID publisher,
+        String publisherName
 ) {
 }
