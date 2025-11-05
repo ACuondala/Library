@@ -1,6 +1,8 @@
 package com.example.nada.Dtos.BookDtos;
 
 import com.example.nada.Dtos.AuthorDtos.AuthorResponseDto;
+import com.example.nada.Dtos.CategoryDtos.CategoryResponseDto;
+import com.example.nada.Dtos.PublisherDto.PublisherResponseDto;
 import com.example.nada.Models.Author;
 import com.example.nada.Models.Category;
 import com.example.nada.Models.Publisher;
@@ -19,9 +21,9 @@ public record BookResponseDto(
          Integer yearPublish,
          Integer totalQuantity,
          Integer quantityAvailable,
-         Category category,
+         CategoryResponseDto category,
          List<AuthorResponseDto> authors,
-         Publisher publisher,
+         PublisherResponseDto publisher,
          LocalDateTime createdAt
 ) {
 }
