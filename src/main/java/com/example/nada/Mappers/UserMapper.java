@@ -2,6 +2,7 @@ package com.example.nada.Mappers;
 
 import com.example.nada.Dtos.UserDto.UserRequestDto;
 import com.example.nada.Dtos.UserDto.UserResponseDto;
+import com.example.nada.Dtos.UserDto.UserUpdateDto;
 import com.example.nada.Models.User;
 import org.mapstruct.*;
 
@@ -13,5 +14,5 @@ public interface UserMapper {
     User toEntity(UserRequestDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateUser(UserRequestDto dto, @MappingTarget User user);
+    void updateUser(UserUpdateDto dto, @MappingTarget User user);
 }
